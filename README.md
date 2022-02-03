@@ -3,7 +3,7 @@
 Group 4
 
 Members:
-Sami Alasfahani
-Khanh Vu
-Thomas Knechtel
-Eyas Valdez
+Sami Alasfahani,
+Khanh Vu,
+Thomas Knechtel,
+Eyas Valdez,
