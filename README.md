@@ -6,4 +6,4 @@ Members:
 Sami Alasfahani,
 Khanh Vu,
 Thomas Knechtel,
-Eyas Valdez,
+Eyas Valdez.
