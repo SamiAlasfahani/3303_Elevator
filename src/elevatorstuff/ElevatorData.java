@@ -16,4 +16,9 @@ public class ElevatorData {
 		destFloor = _destFloor;
 		time = _time;
 	}
+	
+	//dummy constructor
+	public ElevatorData(){
+		
+	}
 }

@@ -2,6 +2,8 @@
  * ElevatorSubclass
  */
 
+package elevatorstuff;
+
 import java.util.*;
 
 /**
@@ -20,12 +22,17 @@ public class ElevatorSubSystem implements Runnable{
 	private ElevatorData currentRequestedFloor;
 	private Deque<ElevatorData> queuedRequests;
 	
+	//DELETE THIS VARIABLE IN THE REAL THING
+	//IT'S JUST HERE FOR TESTING
+	private boolean canStop = false;
+	
 	/**
 	 * Constructor
 	 * @param scheduler
 	 */
 	public ElevatorSubSystem(Scheduler scheduler) {
 		this.scheduler = scheduler;
+		scheduler.registerElevator(this);
 		queuedRequests = new ArrayDeque<ElevatorData>();
 	}
 
@@ -34,24 +41,22 @@ public class ElevatorSubSystem implements Runnable{
 	 */
 	@Override
 	public void run() {
-		try {
+		/*try {
 			queuedRequests.add(scheduler.getData()); //add a request to the queue
 			
 			currentRequestedFloor = queuedRequests.pop();  //pop the first item to get the current request
 			scheduler.setRequest(currentRequestedFloor);   //sent info back to the scheduler		
 		} catch (InteruptedException e) {
 			e.printStackTrace();
+		}*/
+		while(!canStop){
 		}
 	}
 	
-	
-	/**
-	 * main()
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	public void getData(ElevatorData data){
+		System.out.println("I've received data");
+		canStop = true;
+		// you can handle this data however you feel
 	}
 
 }

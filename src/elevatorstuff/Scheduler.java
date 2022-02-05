@@ -1,30 +1,65 @@
 package elevatorstuff;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+/*
+ * @author Sami Alasfahani
+ * 101161597
+ */
+
 public class Scheduler implements Runnable{
 
-	//private List<Elevator> elevators;
-	//private List<Floors> floors;
-	//these lists are commented out so the code doesn't crash and burn before we've added the Elevator and Floor classes
+	private Deque<ElevatorSubSystem> elevators;
+	//private Deque<FloorSubSystem> floors;
+	
+	public Scheduler(){
+		elevators = new ArrayDeque<ElevatorSubSystem>();
+		//elevators = new ArrayDeque<FloorSubSystem>();
+	}
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		
+		//gonna send some dummy data to an elevator just to show how this works
+		getData(true, new ElevatorData());
 		
 	}
 
+	public void registerElevator(ElevatorSubSystem e){
+		elevators.push(e);
+	}
 	
-	public void getData(boolean sendToElevator) {
-		//since ElevatorData no longer tells the scheduler where to send the data, we need to tell the scheduler where to send it
-		//we could also break this up into two methods like I've done with the sendTo methods
+	public void unregisterElevator(ElevatorSubSystem e){
+		elevators.remove(e);
+	}
+	
+	public void registerFloor(ElevatorSubSystem e){
+		//floors.push(e);
+	}
+	
+	public void unregisterFloor(ElevatorSubSystem e){
+		//floors.remove(e);
+	}
+
+	/*
+	* @params sendToElevator
+	*			boolean that tells the scheduler if the request is going to an elevator car or a floor
+	*/
+	public void getData(boolean sendToElevator, ElevatorData data) {
+		if(sendToElevator)
+			sendToElevator(data);
+		else
+			sendToFloor(data);
 	}
 	
 	private void sendToElevator(ElevatorData data) {
-		//selects which elevator to send to, then sends data
-		//might make elevator selection its own method later
+		//ONLY SENDING PINGS TO HEAD FOR NOW, THIS WILL CHANGE IN LATER ITERATIONS
+		elevators.peek().getData(data);
 	}
 	
-	private void sendToFloor() {
-		//same idea as sendToElevator
-		//I've split these two up for now in case sending data to a floor or an elevator differs later on
+	private void sendToFloor(ElevatorData data) {
+		//ONLY SENDING PINGS TO HEAD FOR NOW, THIS WILL CHANGE IN LATER ITERATIONS
+		//floors.peek().getData(data);
 	}
 }
