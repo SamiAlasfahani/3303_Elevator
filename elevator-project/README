@@ -1,0 +1,24 @@
+Group: Eyas Valdez, Khan Vu, Sami Alasfahani, Thomas Knechtel
+
+Responsibilities:
+  ElevatorSubSystem: Khan
+  FloorSubSystem: Thomas
+  Scheduler: Sami
+  
+  Unit Testing: Eyas, Sami
+  ElevatorData: Sami
+  
+  UML Diagrams (both): Khan
+  This file: Sami, Khan (helped write the initial version of the README)
+  
+  File Structure:
+    elevator-project contains everything you need to run the actual program
+    all the source code is in src\main\java\elevatorstuff
+    the filenames in there should be self explanatory (FloorSubSystem contains code for the floor system, Scheduler contains code for the scheduler, etc.)
+    you'll want to import the whole of elevator-project into eclipse to get things running
+    
+   Running:
+    after you've imported everything into eclipse, you should be able to run the project as a java application
+    
+    Testing:
+      
