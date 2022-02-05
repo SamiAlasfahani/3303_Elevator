@@ -15,7 +15,7 @@ import java.util.List;
  */
 public  class FloorSubSystem implements Runnable {
 	private Scheduler scheduler;
-	private static boolean full=false;
+	private static boolean full=true;
 	/**
 	 * Create instance of FloorSubSystem
 	 * @param scheduler the Scheduler to send and receive data from
@@ -26,8 +26,12 @@ public  class FloorSubSystem implements Runnable {
 	/**
 	 * sends new requests of ElevatorData to scheduler
 	 */
-	public void sendRequest() {
-		scheduler.getData(true, getRequest());
+	public  synchronized void sendRequest() {
+		for(ElevatorData data: getRequest()) {
+			scheduler.getData(true, data );
+		}
+		
+		notifyAll();
 	}
 	
 	/**
@@ -35,8 +39,8 @@ public  class FloorSubSystem implements Runnable {
 	 * @return list of ElevatorData from input.txt
 	 * note: commented out code that sends all requests to scheduler to make compatabile with scheduler
 	 */
-	public static synchronized ElevatorData getRequest(){
-		//List<ElevatorData> elevatorList=new ArrayList<>();
+	private static synchronized List<ElevatorData> getRequest(){
+		List<ElevatorData> elevatorList=new ArrayList<>();
 		ElevatorData data=null;
 		try (BufferedReader br = new BufferedReader(new FileReader("src\\elevatorstuff\\input"))) {
                 while(!full) {
@@ -47,15 +51,16 @@ public  class FloorSubSystem implements Runnable {
 						e.printStackTrace();
 					}
                 }
-            	//for(String line=br.readLine(); line!=null;) {
-                String line = br.readLine();
+            for(String line=br.readLine(); line!=null;) {
+                line = br.readLine();
             	String[] info = line.split(" ");
             	Boolean up=false;
             	if(info[2].equals("up")) up=true;
             	if(info[2].equals("null"))up=null;
             	data=new ElevatorData(false, up, Integer.parseInt(info[1]), Integer.parseInt(info[3]), LocalTime.parse(info[3]));
-            		//elevatorList.add(data);
-            	//}
+            	elevatorList.add(data);
+            }
+            
             	
             	
             
@@ -67,8 +72,8 @@ public  class FloorSubSystem implements Runnable {
 			e.printStackTrace();
 		}
 		full=false;
-		FloorSubSystem.class.notifyAll();
-		return data;
+		//FloorSubSystem.class.notifyAll();
+		return elevatorList;
 	}
 	/**
 	 * If all data in input.txt has been processed overwrite file with new Elevator data
