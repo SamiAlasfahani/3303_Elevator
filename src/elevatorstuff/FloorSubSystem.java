@@ -33,9 +33,10 @@ public  class FloorSubSystem implements Runnable {
 	/**
 	 * If input.txt contains requests that have not been sent to Scheduler than attempt to acquire lock and parse input.txt 
 	 * @return list of ElevatorData from input.txt
+	 * note: commented out code that sends all requests to scheduler to make compatabile with scheduler
 	 */
-	public static synchronized List<ElevatorData> getRequest(){
-		List<ElevatorData> elevatorList=new ArrayList<>();
+	public static synchronized ElevatorData getRequest(){
+		//List<ElevatorData> elevatorList=new ArrayList<>();
 		ElevatorData data=null;
 		try (BufferedReader br = new BufferedReader(new FileReader("src\\elevatorstuff\\input"))) {
                 while(!full) {
@@ -46,14 +47,15 @@ public  class FloorSubSystem implements Runnable {
 						e.printStackTrace();
 					}
                 }
-            	for(String line=br.readLine(); line!=null;) {
-            		String[] info = line.split(" ");
-            		Boolean up=false;
-            		if(info[2].equals("up")) up=true;
-            		if(info[2].equals("null"))up=null;
-            		data=new ElevatorData(false, up, Integer.parseInt(info[1]), Integer.parseInt(info[3]), LocalTime.parse(info[3]));
-            		elevatorList.add(data);
-            	}
+            	//for(String line=br.readLine(); line!=null;) {
+                String line = br.readLine();
+            	String[] info = line.split(" ");
+            	Boolean up=false;
+            	if(info[2].equals("up")) up=true;
+            	if(info[2].equals("null"))up=null;
+            	data=new ElevatorData(false, up, Integer.parseInt(info[1]), Integer.parseInt(info[3]), LocalTime.parse(info[3]));
+            		//elevatorList.add(data);
+            	//}
             	
             	
             
@@ -66,7 +68,7 @@ public  class FloorSubSystem implements Runnable {
 		}
 		full=false;
 		FloorSubSystem.class.notifyAll();
-		return elevatorList;
+		return data;
 	}
 	/**
 	 * If all data in input.txt has been processed overwrite file with new Elevator data
