@@ -10,7 +10,7 @@ public class ElevatorData {
 	
 	LocalTime time;
 	
-	public ElevatorData(boolean _comesFromFloor, boolean _requestDirection, int _sourceFloor, int _destFloor, LocalTime _time) {
+	public ElevatorData( boolean _requestDirection, Integer _sourceFloor, Integer _destFloor, LocalTime _time) {
 		requestDirection = _requestDirection;
 		sourceFloor = _sourceFloor;
 		destFloor = _destFloor;
