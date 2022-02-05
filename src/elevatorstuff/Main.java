@@ -2,6 +2,10 @@ package elevatorstuff;
 
 public class Main {
 	public static void main(String args[]) {
-		System.out.println("bruh");
+		Scheduler scheduler = new Scheduler();
+		ElevatorSubSystem elevator = new ElevatorSubSystem(scheduler);
+		
+		new Thread(elevator).start();
+		new Thread(scheduler).start();
 	}
 }

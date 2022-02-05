@@ -5,8 +5,8 @@ import java.time.LocalTime;
 public class ElevatorData {
 	private boolean requestDirection;
 	
-	int sourceFloor;
-	int destFloor;
+	Integer sourceFloor;
+	Integer destFloor;
 	
 	LocalTime time;
 	
@@ -15,5 +15,10 @@ public class ElevatorData {
 		sourceFloor = _sourceFloor;
 		destFloor = _destFloor;
 		time = _time;
+	}
+	
+	//dummy constructor
+	public ElevatorData(){
+		
 	}
 }
