@@ -9,53 +9,55 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-/**
- * @Author: Thomas Knechtel
+
+/*
+ * Author: Thomas Knechtel
  * 101160636
  */
 public  class FloorSubSystem implements Runnable {
 	private Scheduler scheduler;
-	private static boolean full=true;
+	private static boolean full=false;
+	
+	//vars for unit testing
+	private boolean canStop = false;
+	
 	/**
 	 * Create instance of FloorSubSystem
 	 * @param scheduler the Scheduler to send and receive data from
 	 */
 	public FloorSubSystem(Scheduler scheduler) {
 		this.scheduler=scheduler;
+		scheduler.registerFloor(this);
 	}
 	/**
 	 * sends new requests of ElevatorData to scheduler
 	 */
-	public  synchronized void sendRequest() {
-		for(ElevatorData data: getRequest()) {
-			scheduler.getData(true, data );
-			
-		}
-		
-		
-		notifyAll();
+	public void sendRequest() {
+		System.out.println("floor sending request");
+		scheduler.getData(true, getRequest());
 	}
+	
 	/**
-	 * parses String x into an Integer object
-	 * @param x the String to parse
-	 * @return the Integer value
+	 * THIS IS THE FUNCTION THAT THE SCHEDULER PUSHES DATA TO, IT'S HERE NOW FOR TESTING
 	 */
-	static private Integer parseVal(String x) {
-		if(x.equals("null"))return null;
-		else return Integer.parseInt(x);
-		
+	public void getData(ElevatorData data) {
+		System.out.println("elevator received: " + data.getTime());
+		Main.floorDestData = data;
+		canStop = true;
+		Scheduler.stopper = true;
 	}
+	
 	/**
 	 * If input.txt contains requests that have not been sent to Scheduler than attempt to acquire lock and parse input.txt 
 	 * @return list of ElevatorData from input.txt
-	 * 
+	 * note: commented out code that sends all requests to scheduler to make compatible with scheduler
 	 */
-	private static synchronized List<ElevatorData> getRequest(){
-		
-		List<ElevatorData> elevatorList=new ArrayList<>();
-		ElevatorData data=null;
-		try (BufferedReader br = new BufferedReader(new FileReader("src\\elevatorstuff\\input"))) {
-                while(!full) {
+	public static synchronized ElevatorData getRequest(){
+		//List<ElevatorData> elevatorList=new ArrayList<>();
+		ElevatorData data = new ElevatorData(true, 1, 2, LocalTime.MIDNIGHT);
+		/*ElevatorData data=null;
+		try (BufferedReader br = new BufferedReader(new FileReader("src\\elevatorstuff\\input.txt"))) {
+                while(full) {
                 	try {
 						FloorSubSystem.class.wait();
 					} catch (InterruptedException e) {
@@ -63,18 +65,16 @@ public  class FloorSubSystem implements Runnable {
 						e.printStackTrace();
 					}
                 }
-            for(String line=br.readLine(); line!=null; line=br.readLine()) {
-                //line = br.readLine();
+                full = true;
+            	//for(String line=br.readLine(); line!=null;) {
+                String line = br.readLine();
             	String[] info = line.split(" ");
             	Boolean up=false;
             	if(info[2].equals("up")) up=true;
             	if(info[2].equals("null"))up=null;
-            	Integer startFloor = parseVal(info[1]);
-            	Integer destFloor = parseVal(info[3]);
-            	data=new ElevatorData(false, up, startFloor, destFloor, LocalTime.parse(info[0]));
-            	elevatorList.add(data);
-            }
-            
+            	data=new ElevatorData(up, Integer.parseInt(info[1]), Integer.parseInt(info[3]), LocalTime.parse(info[3]));
+            		//elevatorList.add(data);
+            	//}
             	
             	
             
@@ -84,10 +84,11 @@ public  class FloorSubSystem implements Runnable {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		full=false;
-		//FloorSubSystem.class.notifyAll();
-		return elevatorList;
+		FloorSubSystem.class.notifyAll();
+		System.out.println("built request");
+		return data;
 	}
 	/**
 	 * If all data in input.txt has been processed overwrite file with new Elevator data
@@ -104,9 +105,9 @@ public  class FloorSubSystem implements Runnable {
 		}
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter("src\\elevatorstuff\\input"))) {
 			String dir = "null";
-			if(data.requestDirection)dir="up";
-			else if(!data.requestDirection)dir ="down";
-            bw.append(data.time+" "+data.sourceFloor+" "+dir+" "+data.destFloor);
+			if(data.getRequestDirection())dir="up";
+			else if(!data.getRequestDirection())dir ="down";
+            bw.append(data.getTime()+" "+data.getSourceFloor()+" "+dir+data.getDestFloor());
             bw.newLine();
         }catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -120,8 +121,10 @@ public  class FloorSubSystem implements Runnable {
 	}
 	@Override
 	public void run() {
-		while(true) {
-			sendRequest();
+		System.out.println("floors running");
+		sendRequest();
+		while(!canStop) {
+			//sendRequest();
 		}
 		
 	}

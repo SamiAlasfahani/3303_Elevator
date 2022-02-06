@@ -118,6 +118,6 @@ public class Scheduler implements Runnable{
 	private synchronized void sendToFloor(ElevatorData data) {
 		System.out.println("sending data to floor system...");
 		Main.elevatorSourceData = data;
-		FloorSubSystem.updateInput(data);
+		floors.peek().getData(data);
 	}
 }
