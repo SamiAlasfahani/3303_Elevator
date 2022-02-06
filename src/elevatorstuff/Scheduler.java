@@ -110,6 +110,6 @@ public class Scheduler implements Runnable{
 	 */
 	private void sendToFloor(ElevatorData data) {
 		//ONLY SENDING PINGS TO HEAD FOR NOW, THIS WILL CHANGE IN LATER ITERATIONS
-		floors.peek().getData(data);
+		FloorSubSystem.updateInput(data);
 	}
 }
