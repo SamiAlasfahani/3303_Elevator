@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-/*
- * Author: Thomas Knechtel
+/**
+ * @Author: Thomas Knechtel
  * 101160636
  */
 public  class FloorSubSystem implements Runnable {
@@ -35,7 +35,11 @@ public  class FloorSubSystem implements Runnable {
 		
 		notifyAll();
 	}
-	
+	/**
+	 * parses String x into an Integer object
+	 * @param x the String to parse
+	 * @return the Integer value
+	 */
 	static private Integer parseVal(String x) {
 		if(x.equals("null"))return null;
 		else return Integer.parseInt(x);
@@ -44,7 +48,7 @@ public  class FloorSubSystem implements Runnable {
 	/**
 	 * If input.txt contains requests that have not been sent to Scheduler than attempt to acquire lock and parse input.txt 
 	 * @return list of ElevatorData from input.txt
-	 * note: commented out code that sends all requests to scheduler to make compatabile with scheduler
+	 * 
 	 */
 	private static synchronized List<ElevatorData> getRequest(){
 		
